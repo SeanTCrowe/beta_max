@@ -49,9 +49,9 @@ def Fitter(stock,bench):
     
     n=len(bench['DR'])
     
-    s=sigStock*np.sqrt((1-(p[0]**2)*((sigb/sigStock)**2))*(n/(n-2)))
+    s=np.sqrt(sigStock**2-(sigb**2)*p[0]**2)
     
-    stnderror_Slope=(1/np.sqrt(n-2))*np.sqrt((sigStock/sigb)**2-p[0]**2)
+    stnderror_Slope=(s/np.sqrt(sigb))/np.sqrt(n)
     stnderror_Int=(1/np.sqrt(n))*s*np.sqrt(1+(xbar/sigb)**2)
     
     return p,stnderror_Slope,stnderror_Int
@@ -186,7 +186,7 @@ def RWBMax(C,beta):
     return delta
 
 
-def CovMat(stocks,dt=252):
+def CovMat(stocks,t1,t2,dt=252):
     
     import numpy as np
     import pandas as pd
@@ -207,7 +207,7 @@ def CovMat(stocks,dt=252):
     n=len(stocks)
     
     for things in stocks:
-        TheData.append(web.DataReader(things,data_source='yahoo',start="1/1/2018",end='1/1/2019'))
+        TheData.append(web.DataReader(things,data_source='yahoo',start=t1,end=t2))
     
     for m in TheData:
         
